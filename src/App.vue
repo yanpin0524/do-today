@@ -1,6 +1,6 @@
 <template>
   <TheHeader />
-  <router-view></router-view>
+  <RouterView />
   <TheFooter />
 </template>
 
@@ -8,3 +8,10 @@
 import TheHeader from "./components/layout/TheHeader.vue";
 import TheFooter from "./components/layout/TheFooter.vue";
 </script>
+
+<style>
+body {
+  max-width: 700px;
+  margin: 0 auto;
+}
+</style>
