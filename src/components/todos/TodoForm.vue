@@ -135,7 +135,7 @@ export default {
     deleteTodo() {
       if (!this.id) return;
 
-      this.$store.commit("deleteTodo", this.id);
+      this.$store.dispatch("deleteTodo", this.id);
       this.$emit("closeForm");
     },
   },

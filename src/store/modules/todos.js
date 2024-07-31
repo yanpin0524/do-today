@@ -107,19 +107,20 @@ export default {
       const token = context.getters.getToken;
       const userId = context.getters.getUserId;
 
-      if (!token || !userId) return;
+      if (token && userId) {
+        const { id, title, priority } = newTodoContent;
+        const url =
+          context.state.databaseUrl +
+          `/todos/${userId}/${id}.json?auth=${token}`;
 
-      const { id, title, priority } = newTodoContent;
-      const url =
-        context.state.databaseUrl + `/todos/${userId}/${id}.json?auth=${token}`;
-
-      try {
-        await axios.patch(url, {
-          title,
-          priority,
-        });
-      } catch (err) {
-        throw new Error(err);
+        try {
+          await axios.patch(url, {
+            title,
+            priority,
+          });
+        } catch (err) {
+          throw new Error(err);
+        }
       }
     },
     async updateTodoCompleted(context, newTodoContent) {
@@ -128,18 +129,36 @@ export default {
       const token = context.getters.getToken;
       const userId = context.getters.getUserId;
 
-      if (!token || !userId) return;
+      if (token && userId) {
+        const { id, completed } = newTodoContent;
+        const url =
+          context.state.databaseUrl +
+          `/todos/${userId}/${id}.json?auth=${token}`;
 
-      const { id, completed } = newTodoContent;
-      const url =
-        context.state.databaseUrl + `/todos/${userId}/${id}.json?auth=${token}`;
-
-      try {
-        await axios.patch(url, { completed });
-      } catch (error) {
-        throw new Error(error);
+        try {
+          await axios.patch(url, { completed });
+        } catch (error) {
+          throw new Error(error);
+        }
       }
     },
-    deleteTodo() {},
+    async deleteTodo(context, id) {
+      context.commit("deleteTodo", id);
+
+      const token = context.getters.getToken;
+      const userId = context.getters.getUserId;
+
+      if (token && userId) {
+        const url =
+          context.state.databaseUrl +
+          `/todos/${userId}/${id}.json?auth=${token}`;
+
+        try {
+          await axios.delete(url);
+        } catch (err) {
+          throw new Error(err);
+        }
+      }
+    },
   },
 };
