@@ -104,24 +104,32 @@ export default {
     },
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       if (!this.newTitle) {
         this.formValid = false;
         return;
       }
 
-      if (this.isEdit && this.id) {
-        this.$store.commit("setTodo", {
-          id: this.id,
-          title: this.newTitle,
-          priority: this.newPriority,
-        });
-      } else {
-        this.$store.commit("addTodo", {
-          id: new Date().getTime().toString(),
-          title: this.newTitle,
-          priority: this.newPriority,
-        });
+      try {
+        if (this.isEdit && this.id) {
+          this.$store.dispatch("updateTodo", {
+            id: this.id,
+            title: this.newTitle,
+            priority: this.newPriority,
+          });
+        } else {
+          await this.$store.dispatch("addTodo", {
+            title: this.newTitle,
+            priority: this.newPriority,
+          });
+        }
+      } catch (err) {
+        if (err.cause === 401) {
+          this.$store.dispatch("logout");
+          this.$router.replace("/auth/login");
+          return;
+        }
+        alert(err);
       }
 
       this.$emit("closeForm");
@@ -129,10 +137,20 @@ export default {
     cancelForm() {
       this.$emit("closeForm");
     },
-    deleteTodo() {
+    async deleteTodo() {
       if (!this.id) return;
 
-      this.$store.commit("deleteTodo", this.id);
+      try {
+        await this.$store.dispatch("deleteTodo", this.id);
+      } catch (err) {
+        if (err.cause === 401) {
+          this.$store.dispatch("logout");
+          this.$router.replace("/auth/login");
+          return;
+        }
+        alert(err);
+      }
+
       this.$emit("closeForm");
     },
   },

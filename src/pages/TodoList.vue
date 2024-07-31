@@ -5,13 +5,14 @@
       Tasks
     </h4>
     <TodoFilter :activeFilter="activeFilter" :search="search" />
-    <ul class="list-group list-group-flush">
+    <ul v-if="todos.length" class="list-group list-group-flush mt-2">
       <TodoItem
         v-for="todo in todos"
         :key="todo.id"
         v-bind="todo"
         @openForm="openForm" />
     </ul>
+    <p v-else class="text-center opacity-50 p-4 m-0">No tasks found</p>
   </BaseCard>
   <TodoForm
     v-if="displayForm"
@@ -60,6 +61,18 @@ export default {
       this.formPayload = {};
       this.displayForm = false;
     },
+  },
+  async created() {
+    try {
+      await this.$store.dispatch("fetchTodos");
+    } catch (err) {
+      if (err.cause === 401) {
+        this.$store.dispatch("logout");
+        this.$router.replace("/auth/login");
+        return;
+      }
+      alert(err);
+    }
   },
 };
 </script>
