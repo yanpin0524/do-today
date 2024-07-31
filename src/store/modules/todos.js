@@ -28,10 +28,11 @@ export default {
       todo.title = newTodoContent.title;
       todo.priority = newTodoContent.priority;
     },
-    toggleTodoCompleted(state, id) {
+    setTodoCompleted(state, newTodoContent) {
+      const { id, completed } = newTodoContent;
       const todo = state.todos.find((todo) => todo.id === id);
 
-      todo.completed = !todo.completed;
+      todo.completed = completed;
     },
     deleteTodo(state, id) {
       state.todos = state.todos.filter((todo) => todo.id !== id);
@@ -100,7 +101,45 @@ export default {
         throw new Error(err);
       }
     },
-    updateTodo() {},
+    async updateTodo(context, newTodoContent) {
+      context.commit("setTodo", newTodoContent);
+
+      const token = context.getters.getToken;
+      const userId = context.getters.getUserId;
+
+      if (!token || !userId) return;
+
+      const { id, title, priority } = newTodoContent;
+      const url =
+        context.state.databaseUrl + `/todos/${userId}/${id}.json?auth=${token}`;
+
+      try {
+        await axios.patch(url, {
+          title,
+          priority,
+        });
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async updateTodoCompleted(context, newTodoContent) {
+      context.commit("setTodoCompleted", newTodoContent);
+
+      const token = context.getters.getToken;
+      const userId = context.getters.getUserId;
+
+      if (!token || !userId) return;
+
+      const { id, completed } = newTodoContent;
+      const url =
+        context.state.databaseUrl + `/todos/${userId}/${id}.json?auth=${token}`;
+
+      try {
+        await axios.patch(url, { completed });
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
     deleteTodo() {},
   },
 };

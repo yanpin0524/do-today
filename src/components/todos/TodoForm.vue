@@ -112,7 +112,7 @@ export default {
 
       try {
         if (this.isEdit && this.id) {
-          this.$store.commit("setTodo", {
+          this.$store.dispatch("updateTodo", {
             id: this.id,
             title: this.newTitle,
             priority: this.newPriority,

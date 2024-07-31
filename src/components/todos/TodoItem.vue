@@ -69,7 +69,10 @@ export default {
   },
   methods: {
     toggleCompleted() {
-      this.$store.commit("toggleTodoCompleted", this.id);
+      this.$store.dispatch("updateTodoCompleted", {
+        id: this.id,
+        completed: !this.completed,
+      });
     },
   },
 };
