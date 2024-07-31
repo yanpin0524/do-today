@@ -9,9 +9,13 @@ Do-Today is a simple to-do list management website designed to help users keep t
 
 ## Tech Stack
 
-- **Frontend**: Vue3
-- **Backend**: Firebase
-- **Deployment**: Firebase or GitHub Pages
+- **Frontend**:
+  - Vue3
+  - Vuex
+  - Vue Router
+  - Bootstrap5
+- **Backend** & **Deployment**:
+  - Firebase
 
 ## Features
 
