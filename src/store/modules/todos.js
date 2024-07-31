@@ -43,16 +43,20 @@ export default {
       state.todos.push({
         id: todo.id,
         title: todo.title,
-        completed: todo.completed,
+        completed: false,
         priority: todo.priority,
       });
     },
-    setTodo: (state, newTodo) => {
-      const todo = state.todos.find((todo) => todo.id === newTodo.id);
+    setTodo: (state, newTodoContent) => {
+      const todo = state.todos.find((todo) => todo.id === newTodoContent.id);
 
-      todo.title = newTodo.title;
-      todo.completed = newTodo.completed;
-      todo.priority = newTodo.priority;
+      todo.title = newTodoContent.title;
+      todo.priority = newTodoContent.priority;
+    },
+    toggleTodoCompleted: (state, id) => {
+      const todo = state.todos.find((todo) => todo.id === id);
+
+      todo.completed = !todo.completed;
     },
     deleteTodo: (state, id) => {
       state.todos = state.todos.filter((todo) => todo.id !== id);
