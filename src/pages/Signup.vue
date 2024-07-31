@@ -1,16 +1,8 @@
 <template>
   <BaseCard class="mt-5 p-4 w-75 mx-auto border rounded-5">
-    <form class="border-bottom border-success">
+    <form @submit.prevent="signup" class="border-bottom border-success">
       <h1 class="card-title mb-3 p-2 pb-3 text-success fw-bold">Sign Up</h1>
       <div class="container">
-        <label for="user-name">User Name</label>
-        <input
-          class="form-control mb-3"
-          type="text"
-          id="user-name"
-          placeholder="Your Name ..."
-          v-model="userName" />
-
         <label for="email">Email</label>
         <input
           class="form-control mb-3"
@@ -41,10 +33,27 @@
 export default {
   data() {
     return {
-      userName: "",
       email: "",
       password: "",
     };
+  },
+  methods: {
+    async signup() {
+      if (!this.email || !this.password) {
+        return alert("Please enter an email and password");
+      }
+
+      try {
+        await this.$store.dispatch("signup", {
+          email: this.email,
+          password: this.password,
+        });
+
+        this.$router.replace("/todos");
+      } catch (err) {
+        alert(err.message.toLowerCase());
+      }
+    },
   },
 };
 </script>

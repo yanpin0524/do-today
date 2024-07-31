@@ -1,6 +1,6 @@
 <template>
   <BaseCard class="mt-5 p-4 w-75 mx-auto border rounded-5">
-    <form class="border-bottom border-success">
+    <form @submit.prevent="login" class="border-bottom border-success">
       <h1 class="card-title mb-3 p-2 pb-3 text-success fw-bold">Login</h1>
       <div class="container">
         <label for="email">Email</label>
@@ -36,6 +36,24 @@ export default {
       email: "",
       password: "",
     };
+  },
+  methods: {
+    async login() {
+      if (!this.email || !this.password) {
+        return alert("Please enter an email and password");
+      }
+
+      try {
+        await this.$store.dispatch("login", {
+          email: this.email,
+          password: this.password,
+        });
+
+        this.$router.replace("/todos");
+      } catch (err) {
+        alert(err.message.toLowerCase());
+      }
+    },
   },
 };
 </script>

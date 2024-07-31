@@ -7,8 +7,14 @@
         Do-Today
       </RouterLink>
 
+      <button
+        @click="logout"
+        v-if="$store.getters.isAuthenticated"
+        class="btn btn-outline-success fs-5">
+        Logout
+      </button>
       <RouterLink
-        v-if="$router.currentRoute.value.path === '/auth/login'"
+        v-else-if="$router.currentRoute.value.path === '/auth/login'"
         class="btn btn-success fs-5"
         to="/auth/signup">
         Sign Up
@@ -22,3 +28,14 @@
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.replace("/auth/login");
+    },
+  },
+};
+</script>
