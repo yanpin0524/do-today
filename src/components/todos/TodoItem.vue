@@ -68,11 +68,20 @@ export default {
     },
   },
   methods: {
-    toggleCompleted() {
-      this.$store.dispatch("updateTodoCompleted", {
-        id: this.id,
-        completed: !this.completed,
-      });
+    async toggleCompleted() {
+      try {
+        await this.$store.dispatch("updateTodoCompleted", {
+          id: this.id,
+          completed: !this.completed,
+        });
+      } catch (err) {
+        if (err.cause === 401) {
+          this.$store.dispatch("logout");
+          this.$router.replace("/auth/login");
+          return;
+        }
+        alert(err);
+      }
     },
   },
 };

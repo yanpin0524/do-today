@@ -124,6 +124,11 @@ export default {
           });
         }
       } catch (err) {
+        if (err.cause === 401) {
+          this.$store.dispatch("logout");
+          this.$router.replace("/auth/login");
+          return;
+        }
         alert(err);
       }
 
@@ -132,10 +137,20 @@ export default {
     cancelForm() {
       this.$emit("closeForm");
     },
-    deleteTodo() {
+    async deleteTodo() {
       if (!this.id) return;
 
-      this.$store.dispatch("deleteTodo", this.id);
+      try {
+        await this.$store.dispatch("deleteTodo", this.id);
+      } catch (err) {
+        if (err.cause === 401) {
+          this.$store.dispatch("logout");
+          this.$router.replace("/auth/login");
+          return;
+        }
+        alert(err);
+      }
+
       this.$emit("closeForm");
     },
   },

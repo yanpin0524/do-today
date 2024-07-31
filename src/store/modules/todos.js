@@ -68,7 +68,8 @@ export default {
 
         context.commit("setTodos", todos);
       } catch (err) {
-        throw new Error(err);
+        const statusCode = err.toJSON().status;
+        throw new Error(err, { cause: statusCode });
       }
     },
     async addTodo(context, todo) {
@@ -98,7 +99,8 @@ export default {
           ...todo,
         });
       } catch (err) {
-        throw new Error(err);
+        const statusCode = err.toJSON().status;
+        throw new Error(err, { cause: statusCode });
       }
     },
     async updateTodo(context, newTodoContent) {
@@ -119,7 +121,8 @@ export default {
             priority,
           });
         } catch (err) {
-          throw new Error(err);
+          const statusCode = err.toJSON().status;
+          throw new Error(err, { cause: statusCode });
         }
       }
     },
@@ -137,8 +140,9 @@ export default {
 
         try {
           await axios.patch(url, { completed });
-        } catch (error) {
-          throw new Error(error);
+        } catch (err) {
+          const statusCode = err.toJSON().status;
+          throw new Error(err, { cause: statusCode });
         }
       }
     },
@@ -156,7 +160,8 @@ export default {
         try {
           await axios.delete(url);
         } catch (err) {
-          throw new Error(err);
+          const statusCode = err.toJSON().status;
+          throw new Error(err, { cause: statusCode });
         }
       }
     },
