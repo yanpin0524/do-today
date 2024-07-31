@@ -104,24 +104,27 @@ export default {
     },
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       if (!this.newTitle) {
         this.formValid = false;
         return;
       }
 
-      if (this.isEdit && this.id) {
-        this.$store.commit("setTodo", {
-          id: this.id,
-          title: this.newTitle,
-          priority: this.newPriority,
-        });
-      } else {
-        this.$store.commit("addTodo", {
-          id: new Date().getTime().toString(),
-          title: this.newTitle,
-          priority: this.newPriority,
-        });
+      try {
+        if (this.isEdit && this.id) {
+          this.$store.commit("setTodo", {
+            id: this.id,
+            title: this.newTitle,
+            priority: this.newPriority,
+          });
+        } else {
+          await this.$store.dispatch("addTodo", {
+            title: this.newTitle,
+            priority: this.newPriority,
+          });
+        }
+      } catch (err) {
+        alert(err);
       }
 
       this.$emit("closeForm");
