@@ -16,6 +16,9 @@ export default {
     TheHeader,
     TheFooter,
   },
+  created() {
+    this.$store.dispatch("autoLogin");
+  },
 };
 </script>
 
