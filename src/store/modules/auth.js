@@ -9,6 +9,12 @@ export default {
     isAuthenticated(state) {
       return state.token != null;
     },
+    getUserId(state) {
+      return state.userId;
+    },
+    getToken(state) {
+      return state.token;
+    },
   },
   mutations: {
     setUserId(state, userId) {
@@ -74,6 +80,8 @@ export default {
       localStorage.removeItem("token");
       context.commit("setUserId", null);
       context.commit("setToken", null);
+
+      context.commit("fetchTodos");
     },
   },
 };

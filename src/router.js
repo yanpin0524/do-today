@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "./store/index.js";
 import TodoList from "./pages/TodoList.vue";
 import Login from "./pages/Login.vue";
 import Signup from "./pages/Signup.vue";
