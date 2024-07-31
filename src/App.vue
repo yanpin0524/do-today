@@ -16,8 +16,12 @@ export default {
     TheHeader,
     TheFooter,
   },
-  created() {
-    this.$store.dispatch("autoLogin");
+  async created() {
+    try {
+      await this.$store.dispatch("autoLogin");
+    } catch (err) {
+      alert(err);
+    }
   },
 };
 </script>

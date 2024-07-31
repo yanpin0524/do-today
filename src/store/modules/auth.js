@@ -80,6 +80,8 @@ export default {
       localStorage.removeItem("token");
       context.commit("setUserId", null);
       context.commit("setToken", null);
+
+      context.commit("fetchTodos");
     },
   },
 };

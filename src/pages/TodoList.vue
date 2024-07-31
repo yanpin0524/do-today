@@ -5,7 +5,7 @@
       Tasks
     </h4>
     <TodoFilter :activeFilter="activeFilter" :search="search" />
-    <ul v-if="todos.length" class="list-group list-group-flush">
+    <ul v-if="todos.length" class="list-group list-group-flush mt-2">
       <TodoItem
         v-for="todo in todos"
         :key="todo.id"
@@ -61,6 +61,13 @@ export default {
       this.formPayload = {};
       this.displayForm = false;
     },
+  },
+  async created() {
+    try {
+      await this.$store.dispatch("fetchTodos");
+    } catch (err) {
+      alert(err);
+    }
   },
 };
 </script>

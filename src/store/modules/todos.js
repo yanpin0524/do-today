@@ -11,6 +11,9 @@ export default {
     },
   },
   mutations: {
+    setTodos(state, todos) {
+      state.todos = todos;
+    },
     addTodo(state, todo) {
       state.todos.push({
         id: todo.id,
@@ -38,6 +41,35 @@ export default {
     },
   },
   actions: {
+    async fetchTodos(context) {
+      const token = context.getters.getToken;
+      const userId = context.getters.getUserId;
+
+      if (!token || !userId) {
+        context.commit("setTodos", []);
+        return;
+      }
+
+      try {
+        const res = await axios.get(
+          context.state.databaseUrl + `/todos/${userId}.json?auth=${token}`
+        );
+
+        const todos = [];
+        for (const key in res.data) {
+          todos.push({
+            id: key,
+            title: res.data[key].title,
+            completed: res.data[key].completed,
+            priority: res.data[key].priority,
+          });
+        }
+
+        context.commit("setTodos", todos);
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async addTodo(context, todo) {
       const token = context.getters.getToken;
       const userId = context.getters.getUserId;
