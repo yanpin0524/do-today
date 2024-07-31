@@ -1,12 +1,18 @@
 <template>
   <div class="row p-3">
-    <input
-      type="text"
-      class="form-control col-12 mb-4"
-      placeholder="Search"
-      v-model="search" />
+    <div class="input-group col-12 mb-4">
+      <input
+        type="text"
+        class="form-control border-end-0"
+        placeholder="Search"
+        v-model="search" />
+      <i
+        @click="search = ''"
+        class="bi bi-x-lg input-group-text border-start-0 bg-white"></i>
+    </div>
+
     <div class="nav nav-tabs col-12 justify-content-evenly">
-      <li class="nav-item">
+      <li class="nav-item" @click="setFilter('all')">
         <p
           class="nav-link"
           :class="{
@@ -16,42 +22,42 @@
           All
         </p>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setFilter(3)">
         <p
           class="nav-link"
           :class="{
-            active: activeFilter === 'high',
-            'text-success': activeFilter !== 'high',
+            active: activeFilter === 3,
+            'text-success': activeFilter !== 3,
           }">
           High
         </p>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setFilter(2)">
         <p
           class="nav-link"
           :class="{
-            active: activeFilter === 'medium',
-            'text-success': activeFilter !== 'medium',
+            active: activeFilter === 2,
+            'text-success': activeFilter !== 2,
           }">
           Medium
         </p>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setFilter(1)">
         <p
           class="nav-link"
           :class="{
-            active: activeFilter === 'low',
-            'text-success': activeFilter !== 'low',
+            active: activeFilter === 1,
+            'text-success': activeFilter !== 1,
           }">
           Low
         </p>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" @click="setFilter(0)">
         <p
           class="nav-link"
           :class="{
-            active: activeFilter === 'none',
-            'text-success': activeFilter !== 'none',
+            active: activeFilter === 0,
+            'text-success': activeFilter !== 0,
           }">
           No priority
         </p>
@@ -69,13 +75,21 @@ export default {
       search: "",
     };
   },
+  watch: {
+    search() {
+      this.$emit("inputSearch", this.search);
+    },
+  },
   methods: {
     setFilter(filter) {
       this.$emit("setFilter", filter);
     },
-    inputSearch(search) {
-      this.$emit("inputSearch", search);
-    },
   },
 };
 </script>
+
+<style scoped>
+.bi-x-lg {
+  cursor: pointer;
+}
+</style>

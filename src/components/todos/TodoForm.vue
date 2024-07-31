@@ -1,6 +1,6 @@
 <template>
   <BaseCard
-    class="mt-4"
+    class="mt-4 rounded-4"
     :class="{
       'text-bg-success': !isEdit,
       'text-bg-dark': isEdit,
@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import { watch } from "vue";
-
 export default {
   props: {
     action: {

@@ -3,11 +3,17 @@ import axios from "axios";
 export default {
   state: {
     databaseUrl: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-    todos: [],
+    onlyUncompleted: false,
   },
   getters: {
     getTodos(state) {
+      if (state.onlyUncompleted) {
+        return state.todos.filter((todo) => !todo.completed);
+      }
       return state.todos;
+    },
+    getHideCompletedState(state) {
+      return state.onlyUncompleted ? "show" : "hide";
     },
   },
   mutations: {
@@ -37,8 +43,8 @@ export default {
     deleteTodo(state, id) {
       state.todos = state.todos.filter((todo) => todo.id !== id);
     },
-    cleanCompleted(state) {
-      state.todos = state.todos.filter((todo) => !todo.completed);
+    toggleOnlyUncompleted(state) {
+      state.onlyUncompleted = !state.onlyUncompleted;
     },
   },
   actions: {

@@ -1,19 +1,26 @@
 <template>
-  <BaseCard class="mt-4">
+  <BaseCard class="mt-4 rounded-5 p-2 pb-5">
     <h4
       class="card-title mb-3 p-2 pb-3 border-bottom border-success text-success">
       Tasks
+      <button @click="hideCompleted" class="btn btn-sm float-end border-0">
+        {{ $store.getters.getHideCompletedState }} completed
+      </button>
     </h4>
-    <TodoFilter :activeFilter="activeFilter" :search="search" />
-    <ul v-if="todos.length" class="list-group list-group-flush mt-2">
+    <TodoFilter
+      :activeFilter="activeFilter"
+      :search="search"
+      @setFilter="setFilter"
+      @inputSearch="setSearch" />
+    <ul class="list-group list-group-flush mt-2">
       <TodoItem
         v-for="todo in todos"
         :key="todo.id"
         v-bind="todo"
         @openForm="openForm" />
     </ul>
-    <p v-else class="text-center opacity-50 p-4 m-0">No tasks found</p>
   </BaseCard>
+
   <TodoForm
     v-if="displayForm"
     :action="formAction"
@@ -43,11 +50,33 @@ export default {
       formPayload: {},
       activeFilter: "all",
       search: "",
+      filteredTodos: null,
     };
   },
   computed: {
     todos() {
-      return this.$store.getters.getTodos;
+      return this.filteredTodos || this.$store.getters.getTodos;
+    },
+  },
+  watch: {
+    activeFilter() {
+      if (this.activeFilter === "all") {
+        this.filteredTodos = null;
+      } else {
+        this.filteredTodos = this.$store.getters.getTodos.filter(
+          (todo) => todo.priority === this.activeFilter
+        );
+      }
+    },
+    search(value) {
+      this.activeFilter = "all";
+      if (!value) {
+        this.filteredTodos = null;
+      } else {
+        this.filteredTodos = this.$store.getters.getTodos.filter((todo) =>
+          todo.title.toLowerCase().includes(value.toLowerCase())
+        );
+      }
     },
   },
   methods: {
@@ -60,6 +89,15 @@ export default {
       this.formAction = "add";
       this.formPayload = {};
       this.displayForm = false;
+    },
+    setFilter(filter) {
+      this.activeFilter = filter;
+    },
+    setSearch(search) {
+      this.search = search;
+    },
+    hideCompleted() {
+      this.$store.commit("toggleOnlyUncompleted");
     },
   },
   async created() {
