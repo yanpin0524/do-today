@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-Do-Today is a simple to-do list management website designed to help users keep track of their tasks. The project utilizes Vue3 for the frontend and Firebase for a minimal backend solution. It will be deployed either on Firebase Hosting or GitHub Pages.
+Do-Today is a simple to-do list management website designed to help users keep track of their tasks. The project utilizes Vue3 for the frontend and Firebase for a minimal backend solution.
 
 ## Tech Stack
 
